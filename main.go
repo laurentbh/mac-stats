@@ -31,4 +31,9 @@ func main() {
 		panic(err)
 	}
 	fmt.Printf("ssd: %v", *ssd)
+
+	err = PushCounter(name, *batteryInfo, *ssd)
+	if err != nil {
+		panic(err)
+	}
 }
