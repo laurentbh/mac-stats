@@ -92,6 +92,10 @@ func PushCounter(host string, battery BatteryInfo, ssd SsdInfo) error {
 	batCycle.Set(battery.cycle)
 	p.Collector(batCycle)
 
+	p.Grouping("battery", "info")
+	err := p.Push()
+
+	p = push.New("http://localhost:9091", "mac_stats."+host)
 	ssdSpare.SetToCurrentTime()
 	ssdSpare.Set(ssd.AvailableSpare)
 	p.Collector(ssdSpare)
@@ -140,7 +144,8 @@ func PushCounter(host string, battery BatteryInfo, ssd SsdInfo) error {
 	ssdPowerHours.Set(ssd.PowerHours)
 	p.Collector(ssdPowerHours)
 
-	err := p.Push()
+	p.Grouping("ssd", "info")
+	err = p.Push()
 	if err != nil {
 		return err
 	}

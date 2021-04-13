@@ -125,7 +125,7 @@ func ssdSystemCall(ctx context.Context) (*SsdInfo, error) {
 			ret.UnitReadTB, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
 		}
 		if exp[e].expression.Key == data_unit_read {
-			ret.UnitWrite, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
+			ret.UnitRead, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
 		}
 		if exp[e].expression.Key == percentage_used {
 			ret.PercentageUsed, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
