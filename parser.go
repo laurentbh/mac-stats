@@ -63,11 +63,9 @@ type workExpression struct {
 func processLines(ctx context.Context, exp []workExpression, data <-chan string, done chan<- bool) {
 
 	for line := range data {
-		found := false
-		for i := 0; i < len(exp) && !found; i++ {
+		for i := 0; i < len(exp); i++ {
 			m := exp[i].reg.FindStringSubmatch(line)
 			if m != nil {
-				found = true
 				exp[i].expression.Value = m[1]
 			}
 		}
