@@ -26,4 +26,9 @@ func main() {
 	}
 	fmt.Printf("battery: %v", *batteryInfo)
 
+	ssd, err := Ssd()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("ssd: %v", *ssd)
 }
