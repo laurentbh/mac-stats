@@ -85,11 +85,11 @@ func PushCounter(host string, battery BatteryInfo, ssd SsdInfo) error {
 	p := push.New("http://localhost:9091", "mac_stats."+host)
 
 	batCharge.SetToCurrentTime()
-	batCharge.Set(battery.fullCharge)
+	batCharge.Set(battery.FullCharge)
 	p.Collector(batCharge)
 
 	batCycle.SetToCurrentTime()
-	batCycle.Set(battery.cycle)
+	batCycle.Set(battery.Cycle)
 	p.Collector(batCycle)
 
 	p.Grouping("battery", "info")
