@@ -4,8 +4,19 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	"github.com/mitchellh/go-homedir"
 )
 
+var homeDir string
+
+func setup() {
+	homeDir, err := homedir.Dir()
+	if err != nil {
+		panic(err)
+	}
+
+}
 func main() {
 
 	db, err := Connect()
