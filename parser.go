@@ -60,17 +60,23 @@ type workExpression struct {
 	expression Expression
 }
 
-func processLines(ctx context.Context, exp []workExpression, data <-chan string, done chan<- bool) {
+func processLines(ctx context.Context, exp []workExpression, data <-chan string, done chan<- int) {
 
+	regProcessed := 0
 	for line := range data {
 		for i := 0; i < len(exp); i++ {
 			m := exp[i].reg.FindStringSubmatch(line)
 			if m != nil {
 				exp[i].expression.Value = m[1]
+				regProcessed++
 			}
 		}
 	}
-	done <- true
+	if regProcessed == len(exp) {
+		done <- 0
+		return
+	}
+	done <- 1
 }
 func compilePattern(in []Expression) ([]workExpression, error) {
 	ret := make([]workExpression, 0, len(in))

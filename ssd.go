@@ -80,11 +80,11 @@ func ssdSystemCall(ctx context.Context) (*SsdInfo, error) {
 	}
 
 	data := make(chan string, 1000)
-	done := make(chan bool)
+	done := make(chan int)
 	go parseToLines(stdout, data)
 	go processLines(ctx, exp, data, done)
 
-	<-done
+	ok := <-done
 	if err := cmd.Wait(); err != nil {
 		errBuf := make([]byte, 0, 51200)
 		stderr.Read(errBuf)
@@ -95,6 +95,9 @@ func ssdSystemCall(ctx context.Context) (*SsdInfo, error) {
 				return nil, err
 			}
 		}
+	}
+	if ok != 0 {
+		return nil, fmt.Errorf("some SSD regexps where not found")
 	}
 
 	ret := SsdInfo{}

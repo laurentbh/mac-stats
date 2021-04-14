@@ -57,7 +57,7 @@ func TestProcess(t *testing.T) {
 	work, err := compilePattern(exp)
 	assert.Nil(t, err)
 	c := make(chan string)
-	d := make(chan bool)
+	d := make(chan int)
 
 	go processLines(context.TODO(), work, c, d)
 
@@ -65,10 +65,39 @@ func TestProcess(t *testing.T) {
 		c <- s
 	}
 	close(c)
-	<-d
+	ok := <-d
 
+	assert.Equal(t, 0, ok)
 	assert.EqualValues(t, "44", work[0].expression.Value)
 	assert.EqualValues(t, "4479", work[1].expression.Value)
+}
+func TestMissingRegexp(t *testing.T) {
+
+	data := []string{
+		"Health Information:",
+		"Cycle Count: 44",
+		"Condition: Normal",
+		"Battery Installed: Yes",
+	}
+	exp := []Expression{
+		{Pat: "^Cycle Count: (.*)$", Key: "cycle"},
+		{Pat: "^Full Charge Capacity \\(mAh\\): (.*)$", Key: "full"},
+	}
+
+	work, err := compilePattern(exp)
+	assert.Nil(t, err)
+	c := make(chan string)
+	d := make(chan int)
+
+	go processLines(context.TODO(), work, c, d)
+
+	for _, s := range data {
+		c <- s
+	}
+	close(c)
+	ok := <-d
+
+	assert.Equal(t, 1, ok)
 }
 
 func TestProcessFile(t *testing.T) {

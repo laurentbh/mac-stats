@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os/exec"
 	"strconv"
 )
@@ -44,13 +45,17 @@ func systemCall(ctx context.Context) (*BatteryInfo, error) {
 	}
 
 	data := make(chan string, 1000)
-	done := make(chan bool)
+	done := make(chan int)
 	go parseToLines(stdout, data)
 	go processLines(ctx, exp, data, done)
 
-	<-done
+	ok := <-done
 	if err := cmd.Wait(); err != nil {
 		return nil, err
+	}
+
+	if ok != 0 {
+		return nil, fmt.Errorf("some battery regexps where not found")
 	}
 
 	ret := BatteryInfo{}
