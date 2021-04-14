@@ -4,22 +4,23 @@ import (
 	"context"
 	"fmt"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
 type SsdInfo struct {
-	AvailableSpare          string
-	AvailableSpareThreshold string
-	PercentageUsed          string
-	UnitRead                string
-	UnitReadTB              string
-	UnitWrite               string
-	UnitWriteTB             string
-	HostRead                string
-	HostWrite               string
-	PowerCycle              string
-	PowerHours              string
-	MediaErrors             string
+	AvailableSpare          float64
+	AvailableSpareThreshold float64
+	PercentageUsed          float64
+	UnitRead                float64
+	UnitReadTB              float64
+	UnitWrite               float64
+	UnitWriteTB             float64
+	HostRead                float64
+	HostWrite               float64
+	PowerCycle              float64
+	PowerHours              float64
+	MediaErrors             float64
 }
 
 const (
@@ -100,40 +101,40 @@ func ssdSystemCall(ctx context.Context) (*SsdInfo, error) {
 	for e := 0; e < len(exp); e++ {
 
 		if exp[e].expression.Key == media_errors {
-			ret.MediaErrors = exp[e].expression.Value
+			ret.MediaErrors, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
 		}
 		if exp[e].expression.Key == power_hours {
-			ret.PowerHours = exp[e].expression.Value
+			ret.PowerHours, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
 		}
 		if exp[e].expression.Key == power_cycle {
-			ret.PowerCycle = exp[e].expression.Value
+			ret.PowerCycle, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
 		}
 		if exp[e].expression.Key == host_write {
-			ret.HostWrite = strings.ReplaceAll(exp[e].expression.Value, ",", "")
+			ret.HostWrite, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
 		}
 		if exp[e].expression.Key == host_read {
-			ret.HostRead = strings.ReplaceAll(exp[e].expression.Value, ",", "")
+			ret.HostRead, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
 		}
 		if exp[e].expression.Key == data_unit_writeTB {
-			ret.UnitWriteTB = strings.ReplaceAll(exp[e].expression.Value, ",", "")
+			ret.UnitWriteTB, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
 		}
 		if exp[e].expression.Key == data_unit_write {
-			ret.UnitWrite = strings.ReplaceAll(exp[e].expression.Value, ",", "")
+			ret.UnitWrite, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
 		}
 		if exp[e].expression.Key == data_unit_readTB {
-			ret.UnitReadTB = strings.ReplaceAll(exp[e].expression.Value, ",", "")
+			ret.UnitReadTB, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
 		}
 		if exp[e].expression.Key == data_unit_read {
-			ret.UnitWrite = strings.ReplaceAll(exp[e].expression.Value, ",", "")
+			ret.UnitRead, _ = strconv.ParseFloat(strings.ReplaceAll(exp[e].expression.Value, ",", ""), 64)
 		}
 		if exp[e].expression.Key == percentage_used {
-			ret.PercentageUsed = exp[e].expression.Value
+			ret.PercentageUsed, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
 		}
 		if exp[e].expression.Key == spare {
-			ret.AvailableSpare = exp[e].expression.Value
+			ret.AvailableSpare, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
 		}
 		if exp[e].expression.Key == spare_threshold {
-			ret.AvailableSpareThreshold = exp[e].expression.Value
+			ret.AvailableSpareThreshold, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
 		}
 	}
 	return &ret, nil

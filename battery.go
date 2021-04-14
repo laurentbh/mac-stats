@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"os/exec"
+	"strconv"
 )
 
 const (
@@ -14,8 +15,8 @@ const (
 )
 
 type BatteryInfo struct {
-	fullCharge string
-	cycle      string
+	FullCharge float64
+	Cycle      float64
 }
 
 var batteryExp = []Expression{
@@ -55,10 +56,10 @@ func systemCall(ctx context.Context) (*BatteryInfo, error) {
 	ret := BatteryInfo{}
 	for e := 0; e < len(exp); e++ {
 		if exp[e].expression.Key == battery_key_cycle {
-			ret.cycle = exp[e].expression.Value
+			ret.Cycle, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
 		}
 		if exp[e].expression.Key == battery_key_full {
-			ret.fullCharge = exp[e].expression.Value
+			ret.FullCharge, _ = strconv.ParseFloat(exp[e].expression.Value, 64)
 		}
 
 	}
