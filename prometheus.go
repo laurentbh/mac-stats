@@ -94,6 +94,9 @@ func PushCounter(host string, battery BatteryInfo, ssd SsdInfo) error {
 
 	p.Grouping("battery", "info")
 	err := p.Push()
+	if err != nil {
+		return err
+	}
 
 	p = push.New("http://localhost:9091", "mac_stats."+host)
 	ssdSpare.SetToCurrentTime()
