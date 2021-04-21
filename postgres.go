@@ -12,14 +12,16 @@ type Postgres struct {
 	pool *pgxpool.Pool
 }
 
-func Connect() (*Postgres, error) {
+func Connect(conf *Config) (*Postgres, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(conf.Postgres.ConnectionTimeout)*time.Second)
+	defer cancel()
 	connectionString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s",
-		"localhost", //os.Getenv("USERS_DB_HOST"),
-		5432,
-		"laurent",  //os.Getenv("USERS_DB_USERNAME"),
-		"laurent",  //os.Getenv("USERS_DB_PASSWORD"),
-		"macstats") //os.Getenv("USERS_DB_NAME"))
-	dbpool, err := pgxpool.Connect(context.Background(), connectionString)
+		conf.Postgres.Host,
+		conf.Postgres.Port,
+		conf.Postgres.User,
+		conf.Postgres.Password,
+		conf.Postgres.Database)
+	dbpool, err := pgxpool.Connect(ctx, connectionString)
 	if err != nil {
 		return nil, fmt.Errorf("unable to connect to database: %v", err)
 	}

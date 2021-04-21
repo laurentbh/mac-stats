@@ -8,11 +8,15 @@ import (
 
 func main() {
 
+	config, err := getConfig()
+	if err != nil {
+		panic(err)
+	}
 	recovery := NewRecovery()
 
 	activateRecovery := false
 
-	db, err := Connect()
+	db, err := Connect(config)
 	if err != nil {
 		fmt.Printf("Recovery mode active (%v)\n", err)
 		activateRecovery = true
@@ -50,6 +54,7 @@ func main() {
 		err = db.InsertBattery(hostname, now, *batteryInfo)
 		if err != nil {
 			fmt.Printf("error insert battery %v\n", err)
+			recovery.SaveBattery(now, hostname, *batteryInfo)
 		}
 	}
 
@@ -80,6 +85,7 @@ func main() {
 		err = db.InsertSSD(hostname, now, *ssd)
 		if err != nil {
 			fmt.Printf("error insert ssd %v\n", err)
+			recovery.SaveSsd(now, hostname, *ssd)
 		}
 	}
 

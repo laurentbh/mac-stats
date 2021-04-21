@@ -1,0 +1,6 @@
+postgres:
+  host: cube
+  database: macstats
+  port: 5432
+  user: laurent
+  password: laurent
