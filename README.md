@@ -9,7 +9,7 @@ Tested under Catalina (10.15.7)
 
 ## install
 - build `go` binary
-- create the database, [see schema](https://github.com/laurentbh/mac-stats/blob/schema.sql)
+- create the database, [see schema](https://github.com/laurentbh/mac-stats/blob/main/schema.sql)
 - config database, the config file needs to be either in the current dir or in ~/.config
 
  change the [config file](https://github.com/laurentbh/mac-stats/blob/main/mac-stats.yaml)
