@@ -10,7 +10,24 @@ Tested under Catalina (10.15.7)
 ## install
 - build `go` binary
 - create the database, [see schema](https://github.com/laurentbh/mac-stats/schema.sql)
-- change DB credentials, as there is no config yet [see](https://github.com/laurentbh/mac-stats/blob/main/postgres.go#L15-L21)
+- config database, the config file needs to be either in the current dir or in ~/.config
+
+ [change](https://github.com/laurentbh/mac-stats/mac-stats.yaml)
+
+## display example
+![](doc/unit_read_grafana.png)
+With [grafana](https://grafana.com/) and query
+
+```
+SELECT
+  stamp AS "time",
+  ((metrics->>'UnitRead')::integer) AS "Unit Read"
+FROM
+  ssd
+WHERE
+  $__timeFilter(stamp)
+
+```
 ## requirements:
 - [Postgres DB](https://www.postgresql.org/)
 - [smartcl](http://www.smartmontools.org)
