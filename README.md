@@ -12,7 +12,7 @@ Tested under Catalina (10.15.7)
 - create the database, [see schema](https://github.com/laurentbh/mac-stats/schema.sql)
 - config database, the config file needs to be either in the current dir or in ~/.config
 
- [change](https://github.com/laurentbh/mac-stats/mac-stats.yaml)
+ change the [config file](https://github.com/laurentbh/mac-stats/blob/main/mac-stats.yaml)
 
 ## display example
 ![](doc/unit_read_grafana.png)
