@@ -45,6 +45,7 @@ func (r *Recovery) SaveBattery(stamp time.Time, host string, bat BatteryInfo) er
 	tmpTime := stamp.UnixNano() / int64(time.Millisecond)
 	fileName := r.WorkDir + "/" + battPrefix + strconv.FormatInt(tmpTime, 10) + ".json"
 	err := ioutil.WriteFile(fileName, byte, 0644)
+	fmt.Printf("\u001b[32msaving battery stats: \u001b[34m%s\u001b[0m\n", fileName)
 	return err
 }
 func (r *Recovery) SaveSsd(stamp time.Time, host string, ssd SsdInfo) error {
@@ -58,6 +59,7 @@ func (r *Recovery) SaveSsd(stamp time.Time, host string, ssd SsdInfo) error {
 	tmpTime := stamp.UnixNano() / int64(time.Millisecond)
 	fileName := r.WorkDir + "/" + ssdPrefix + strconv.FormatInt(tmpTime, 10) + ".json"
 	err := ioutil.WriteFile(fileName, byte, 0644)
+	fmt.Printf("\u001b[32mSaving SSD stats in \u001b[34m%s\u001b[0m\n", fileName)
 	return err
 }
 
@@ -69,6 +71,7 @@ func (r *Recovery) LoadBattery() ([]RecoveryBattery, error) {
 	}
 	for _, f := range files {
 		if strings.HasPrefix(f.Name(), battPrefix) && strings.HasSuffix(f.Name(), ".json") {
+			fmt.Printf("\u001b[32mrecovering: \u001b[34m%s\u001b[0m\n", f.Name())
 			bytes, _ := ioutil.ReadFile(r.WorkDir + "/" + f.Name())
 			ret = append(ret, RecoveryBattery{})
 			json.Unmarshal(bytes, &(ret[len(ret)-1]))
@@ -85,6 +88,7 @@ func (r *Recovery) LoadSsd() ([]RecoverySsd, error) {
 	}
 	for _, f := range files {
 		if strings.HasPrefix(f.Name(), ssdPrefix) && strings.HasSuffix(f.Name(), ".json") {
+			fmt.Printf("\u001b[32mrecovering: \u001b[34m%s\u001b[0m\n", f.Name())
 			bytes, _ := ioutil.ReadFile(r.WorkDir + "/" + f.Name())
 			ret = append(ret, RecoverySsd{})
 			json.Unmarshal(bytes, &(ret[len(ret)-1]))

@@ -18,7 +18,7 @@ func main() {
 
 	db, err := Connect(config)
 	if err != nil {
-		fmt.Printf("Recovery mode active (%v)\n", err)
+		fmt.Printf("\u001b[31m%v\n\u001b[32mRecovery mode active\u001b[0m\n", err)
 		activateRecovery = true
 	}
 	hostname, err := os.Hostname()
@@ -27,13 +27,13 @@ func main() {
 	}
 
 	now := time.Now()
-	fmt.Printf("hostname: %s\nnow:%v\n", hostname, now)
+	fmt.Printf("\u001b[32mhostname: \u001b[34m%s\n\u001b[32mtime stamp: \u001b[34m%v\u001b[0m\n", hostname, now)
 	batteryInfo, err := Battery()
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("battery: %v\n", *batteryInfo)
+	// fmt.Printf("battery: %v\n", *batteryInfo)
 	if activateRecovery {
 		recovery.SaveBattery(now, hostname, *batteryInfo)
 	} else {
@@ -63,7 +63,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("ssd: %v\n", *ssd)
+	// fmt.Printf("ssd: %v\n", *ssd)
 
 	if activateRecovery {
 		recovery.SaveSsd(now, hostname, *ssd)
@@ -93,4 +93,6 @@ func main() {
 	// if err != nil {
 	// 	panic(err)
 	// }
+
+	fmt.Println()
 }
