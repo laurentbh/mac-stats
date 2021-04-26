@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -69,6 +71,7 @@ func (r *Recovery) LoadBattery() ([]RecoveryBattery, error) {
 	if err != nil {
 		return nil, err
 	}
+	sort.Sort(filesByTime(files))
 	for _, f := range files {
 		if strings.HasPrefix(f.Name(), battPrefix) && strings.HasSuffix(f.Name(), ".json") {
 			fmt.Printf("\u001b[32mrecovering: \u001b[34m%s\u001b[0m\n", f.Name())
@@ -86,6 +89,7 @@ func (r *Recovery) LoadSsd() ([]RecoverySsd, error) {
 	if err != nil {
 		return nil, err
 	}
+	sort.Sort(filesByTime(files))
 	for _, f := range files {
 		if strings.HasPrefix(f.Name(), ssdPrefix) && strings.HasSuffix(f.Name(), ".json") {
 			fmt.Printf("\u001b[32mrecovering: \u001b[34m%s\u001b[0m\n", f.Name())
@@ -116,4 +120,17 @@ func NewRecovery() *Recovery {
 		}
 	}
 	return &Recovery{WorkDir: workDir}
+}
+
+type filesByTime []fs.FileInfo
+func (a filesByTime) Len() int {
+	return len(a)
+}
+
+func (a filesByTime) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+
+func (a filesByTime) Less (i, j int) bool {
+	return a[i].ModTime().Before( a[j].ModTime())
 }
