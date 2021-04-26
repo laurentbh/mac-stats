@@ -59,7 +59,7 @@ func main() {
 	}
 
 	now = time.Now()
-	ssd, err := Ssd()
+	ssd, err := Ssd(*config)
 	if err != nil {
 		panic(err)
 	}

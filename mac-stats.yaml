@@ -4,3 +4,6 @@ postgres:
   port: 5432
   user: laurent
   password: laurent
+
+smartctl:
+  path: /usr/local/bin

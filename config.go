@@ -16,6 +16,9 @@ type Config struct {
 		Password          string
 		ConnectionTimeout int
 	}
+	Smart struct {
+		Path string
+	}
 }
 
 func getConfig() (*Config, error) {
@@ -31,6 +34,9 @@ func getConfig() (*Config, error) {
 	viper.SetDefault("Postgres.Database", "macstats")
 	viper.SetDefault("Postgres.Port", "5432")
 	viper.SetDefault("Postgres.connectionTimeout", 10)
+
+	// assuming smartctl was brewed
+	viper.SetDefault("Smart.path", "/usr/local/bin")
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {

@@ -56,16 +56,17 @@ var ssdExp = []Expression{
 	{Pat: "^Media and Data Integrity Errors:\\s*([0-9].*)$", Key: media_errors},
 }
 
-func Ssd() (*SsdInfo, error) {
-	return ssdSystemCall(context.Background())
+func Ssd(cfg Config) (*SsdInfo, error) {
+	return ssdSystemCall(context.Background(), cfg)
 }
 
-func ssdSystemCall(ctx context.Context) (*SsdInfo, error) {
+func ssdSystemCall(ctx context.Context, cfg Config) (*SsdInfo, error) {
 	exp, err := compilePattern(ssdExp)
 	if err != nil {
 		return nil, err
 	}
-	cmd := exec.CommandContext(context.Background(), SSD_CMD, SSD_ARG1, SSD_ARG2)
+	exe := cfg.Smart.Path + "/" + SSD_CMD
+	cmd := exec.CommandContext(context.Background(), exe, SSD_ARG1, SSD_ARG2)
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {

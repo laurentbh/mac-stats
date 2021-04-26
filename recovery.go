@@ -59,7 +59,7 @@ func (r *Recovery) SaveSsd(stamp time.Time, host string, ssd SsdInfo) error {
 	tmpTime := stamp.UnixNano() / int64(time.Millisecond)
 	fileName := r.WorkDir + "/" + ssdPrefix + strconv.FormatInt(tmpTime, 10) + ".json"
 	err := ioutil.WriteFile(fileName, byte, 0644)
-	fmt.Printf("\u001b[32mSaving SSD stats in \u001b[34m%s\u001b[0m\n", fileName)
+	fmt.Printf("\u001b[32msaving SSD stats: \u001b[34m%s\u001b[0m\n", fileName)
 	return err
 }
 
